@@ -1,0 +1,33 @@
+#!/bin/bash
+
+## TEMPLATE FOR JAVA
+## ----------------
+
+# The project name and path to parent directory will be passed
+project_name="$1"
+project_path="$2"
+
+# Create the project directory
+mkdir "$project_path/$project_name"
+# Move into it
+cd $_
+
+# Create input and output files
+touch input
+touch output
+
+# Base java file
+cat > "$project_name.java" << EOF
+class Main {
+	public static void main(String[] args) {}
+}
+EOF
+
+# Add a Makefile
+# Run `make run` to compile your code, run it against the given input and compare it with the given output
+cat > Makefile << EOF
+run:
+	rm -rf progout
+	java "$project_name.java" < input >> progout
+	diff output progout
+EOF
