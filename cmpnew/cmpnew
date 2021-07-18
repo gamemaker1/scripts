@@ -112,6 +112,7 @@ print_logo
 
 # Check which lang to use
 lang="$1"
+project_path="$2"
 print_info "Using language $lang"
 
 # Check if a template exists for it
@@ -123,7 +124,9 @@ fi
 
 print_success "Found template for $lang!"
 project_name=$(ask_question "Enter project name:")
-project_path=$(ask_question "Enter path to project directory:")
+if [[ -z "$project_path" ]]; then
+	project_path=$(ask_question "Enter path to project directory:")
+fi
 
 print_info "Setting up project $project_name (in directory: $project_path)..."
 "$TEMPLATES_DIR/$lang.template" "$project_name" "$project_path"
