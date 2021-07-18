@@ -18,9 +18,19 @@ touch output
 
 # Base java file
 cat > "$project_name.java" << EOF
+import java.util.Scanner;
+
 class Main {
-	public static void main(String[] args) {}
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n = s.nextInt();
+
+		while (n-- >= 0) {
+			System.out.println(n);
+		}
+	}
 }
+
 EOF
 
 # Add a Makefile

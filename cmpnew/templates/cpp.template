@@ -18,9 +18,7 @@ touch output
 
 # Base C++ file
 cat > "$project_name.cpp" << EOF
-#include <iostream>
-#include <algorithm>
-#include <cmath>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -28,7 +26,7 @@ int main() {
 	int T;
 	scanf("%d", &T);
 	while (T--) {
-		
+		printf("%d", T);
 	}
 
 	return 0;

@@ -18,7 +18,10 @@ touch output
 
 # Base python file
 cat > "$project_name.python" << EOF
-print('Bello there!')
+T = int(input())
+while T > 0:
+	T -= 1
+	print(T)
 EOF
 
 # Add a Makefile
