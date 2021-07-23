@@ -1,0 +1,49 @@
+#!/bin/bash
+
+## TEMPLATE FOR AN AUR PACKAGE
+## ---------------------------
+
+# The project name and path to parent directory will be passed
+project_name="$1"
+project_path="$2"
+
+# Ensure the parent directory exists
+mkdir -p "$project_path"
+# Clone the package base
+git clone "ssh://aur@aur.archlinux.org/$project_name.git"
+
+# Move into it
+cd "$project_path/$project_name"
+
+# Ensure the directory is empty
+if [[ -n $(ls .) ]]; then
+	echo -e "\e[1;31mERR Package already seems to exist, exiting\e[0m"
+	exit 2
+fi
+
+# Create a generic .gitignore
+cat > ".gitignore" << EOF
+# Ignore any built or downloaded files
+pkg
+src
+
+*.tar*
+*.zip*
+EOF
+
+# Copy over the PKGBUILD
+cp /usr/share/pacman/PKGBUILD.proto ./PKGBUILD
+
+# Print out instructions
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mAUR package scaffold completed successfully!\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mEdit the PKGBUILD file. Then run the pkgchk script\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mno arguments to add checksums, generate a .SRCINFO\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mfile, build the package and run namcap on it. If none\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mof the above steps produce any errors, pkgchk will prompt\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1myou to push the package to AUR.\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mNote: you must have the namcap and pacman-contrib\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mpackages installed for the script to work.\e[0m"
+echo -e ""

@@ -1,18 +1,15 @@
 #!/bin/bash
 
-## CMP NEW
+## NEWPROJ
 ## -------
 
-# Create a project with:
-# - a source file using a predefined template
-# - input and output files
-# - a Makefile to run it
+# Create a project based on a given template
 
 ## CREDITS
 # ASCII art using the figlet CLI from AUR (https://aur.archlinux.org/packages/figlet) and the pagga font from the figlet-fonts-extra package from AUR (https://aur.archlinux.org/packages/figlet-fonts-extra_)
 
 ## DEPENDENCIES
-# make
+# none so far
 
 ## PREFLIGHT
 # Unalias everything to prevent weirdness
@@ -87,20 +84,20 @@ function ask_question {
 
 ## VARS
 # Config dir
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME}/.config/cmpnew"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME}/.config/newproj"
 # Templates dir
 TEMPLATES_DIR="$CONFIG_DIR/templates"
 
 ## UI
 # Print the logo
 function print_logo {
-	# figlet -f pagga 'CMPNEW'
+	# figlet -f pagga 'NEWPROJ'
 	print ""
-	print_bold "░░░░░░░░░░░░░░░░░░░░░░░░░"
-	print_bold "░█▀▀░█▄█░█▀█░█▀█░█▀▀░█░█░"
-	print_bold "░█░░░█░█░█▀▀░█░█░█▀▀░█▄█░"
-	print_bold "░▀▀▀░▀░▀░▀░░░▀░▀░▀▀▀░▀░▀░"
-	print_bold "░░░░░░░░░░░░░░░░░░░░░░░░░"
+	print_bold "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+	print_bold "░█▀█░█▀▀░█░█░█▀█░█▀▄░█▀█░▀▀█░"
+	print_bold "░█░█░█▀▀░█▄█░█▀▀░█▀▄░█░█░░░█░"
+	print_bold "░▀░▀░▀▀▀░▀░▀░▀░░░▀░▀░▀▀▀░▀▀░░"
+	print_bold "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 	print ""
 }
 
@@ -110,26 +107,41 @@ function print_logo {
 # Print the logo
 print_logo
 
-# Check which lang to use
-lang="$1"
-project_path="$2"
-print_info "Using language $lang"
+# The user may pass the project name, template and parent directory as parameters
+project_name="$1"
+template="$2"
+parent_dir="$3"
 
+# Check if the template exists
+if [[ -z "$template" ]]; then
+	template=$(ask_question "Enter template name:")
+fi
+print_info "Using template $template"
 # Check if a template exists for it
-print_info "Searching for $lang template in $TEMPLATES_DIR..."
-if ! [[ -f "$TEMPLATES_DIR/$lang.template" ]]; then
-	print_error "Could not find template for $lang in $TEMPLATES_DIR!"
+print_info "Searching for $template template in $TEMPLATES_DIR..."
+if ! [[ -f "$TEMPLATES_DIR/$template.template" ]]; then
+	# If not, error out
+	print_error "Could not find template for $template in $TEMPLATES_DIR!"
 	exit 1
 fi
+print_success "Found template for $template!"
 
-print_success "Found template for $lang!"
-project_name=$(ask_question "Enter project name:")
-if [[ -z "$project_path" ]]; then
-	project_path=$(ask_question "Enter path to project directory:")
+# Get the project name if it was not passed as an argument
+if [[ -z "$project_name" ]]; then
+	project_name=$(ask_question "Enter the name of the project:")
 fi
 
-print_info "Setting up project $project_name (in directory: $project_path)..."
-"$TEMPLATES_DIR/$lang.template" "$project_name" "$project_path"
-print_info "Done!"
+# Get the parent directory if it was not passed as an argument
+if [[ -z "$parent_dir" ]]; then
+	parent_dir=$(ask_question "Enter path to parent directory:")
+fi
+
+print_info "Setting up project $project_name (in directory: $parent_dir)..."
+
+# Run the script for that template
+"$TEMPLATES_DIR/$template.template" "$project_name" "$parent_dir"
+
+# Done!
+print_success "Done!"
 
 # EOF

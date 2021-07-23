@@ -1,20 +1,20 @@
-.PHONY: install logo pkgchk cmpnew
+.PHONY: install logofi pkgchk newproj
 
 install:
 	mkdir -p ~/.local/scripts
 
-	make logo
+	make logofi
 	make pkgchk
-	make cmpnew
+	make newproj
 
-logo:
-	cp ./logo/logo ~/.local/scripts/
+logofi:
+	cp ./logofi/logofi ~/.local/scripts/
 
 pkgchk:
 	cp ./pkgchk/pkgchk ~/.local/scripts/
 
-cmpnew:
-	cp ./cmpnew/cmpnew ~/.local/scripts/
+newproj:
+	cp ./newproj/newproj ~/.local/scripts/
 
-	mkdir -p ~/.config/cmpnew/templates
-	cp -r ./cmpnew/templates/ ~/.config/cmpnew/
+	mkdir -p ~/.config/newproj/templates
+	cp -r ./newproj/templates/ ~/.config/newproj/
