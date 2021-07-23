@@ -7,17 +7,29 @@
 project_name="$1"
 project_path="$2"
 
-# Create the project directory
+# Project structure:
+# - .
+# -- source
+#   -- {main.java}
+# -- out
+#   -- program-output
+# -- io
+#   -- input
+#   -- output
+# -- Makefile
+#
+
 mkdir -p "$project_path/$project_name"
-# Move into it
 cd $_
 
-# Create input and output files
-touch input
-touch output
+mkdir -p source out io
+touch source/main.java
+touch io/input
+touch io/output
+touch Makefile
 
 # Base java file
-cat > "$project_name.java" << EOF
+cat > "source/main.java" << EOF
 import java.util.Scanner;
 
 class Main {
@@ -30,14 +42,31 @@ class Main {
 		}
 	}
 }
-
 EOF
 
 # Add a Makefile
 # Run `make run` to compile your code, run it against the given input and compare it with the given output
 cat > Makefile << EOF
+clean:
+	rm -rf out
+	mkdir -p out
+
 run:
-	rm -rf progout
-	java "$project_name.java" < input >> progout
-	diff output progout
+	make clean
+	make compile
+	time java source/main.java < input >> out/program-output
+	diff output out/program-output
 EOF
+
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mJava program scaffold completed successfully!\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mEnter the sample input and corresponding output into\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mthe \e[0;32minput\e[1m file and the \e[0;32moutput\e[1m files\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mrespectively. To test your code, run \e[0;32mmake run\e[1m in the\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mproject's root. The makefile compiles the file, runs it with the\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mgiven input and compares it with the input. It also times the program\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mNote: you must have the make and jdk packges installed\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mfor the script to work.\e[0m"
+echo -e ""

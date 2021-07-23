@@ -12,12 +12,30 @@ mkdir -p "$project_path/$project_name"
 # Move into it
 cd $_
 
-# Create input and output files
-touch input
-touch output
+# Project structure:
+# - .
+# -- source
+#   -- {main.cpp}
+# -- out
+#   -- {project_name}
+#   -- program-output
+# -- io
+#   -- input
+#   -- output
+# -- Makefile
+#
+
+mkdir -p "$project_path/$project_name"
+cd $_
+
+mkdir -p source out io
+touch source/main.cpp
+touch io/input
+touch io/output
+touch Makefile
 
 # Base C++ file
-cat > "$project_name.cpp" << EOF
+cat > "source/main.cpp" << EOF
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -36,9 +54,30 @@ EOF
 # Add a Makefile
 # Run `make run` to compile your code, run it against the given input and compare it with the given output
 cat > Makefile << EOF
+clean:
+	rm -rf out
+	mkdir -p out
+
+compile:
+	g++ "source/main.cpp" -o "out/$project_name"
+
 run:
-	rm -rf progout
-	g++ "$project_name.cpp" -o "$project_name"
-	"./$project_name" < input >> progout
-	diff output progout
+	make clean
+	make compile
+	time "./$project_name" < input >> out/program-output
+	diff output out/program-output
 EOF
+
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mCPP program scaffold completed successfully!\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mEnter the sample input and corresponding output into\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mthe \e[0;32minput\e[0m\e[1m file and the \e[0;32moutput\e[0m\e[1m files respectively\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mTo test your code, run \e[0;32mmake run\e[0m\e[1m from the root of the\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mproject. The makefile compiles the file, runs it with the\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mgiven input and compares it with the input. It also times\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mthe program.\e[0m"
+echo -e ""
+echo -e "\e[1;34m==>\e[0m \e[1mNote: you must have the make and g++ packges installed\e[0m"
+echo -e "\e[1;34m==>\e[0m \e[1mfor the script to work.\e[0m"
+echo -e ""
