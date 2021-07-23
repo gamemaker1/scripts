@@ -24,7 +24,7 @@ shopt -s nullglob
 ## PRINTING MESSAGES
 # Print text
 function print {
-	echo -e "\e[1;36m$*\e[0m"
+	echo -e "$*"
 }
 # Print title text
 function print_title {
@@ -36,11 +36,11 @@ function print_bold {
 }
 # Print success text
 function print_success {
-	echo -e "\e[1;32m==> $*\e[0m"
+	echo -e "\e[1;32m==>\e[0m \e[1m$*\e[0m"
 }
 # Print progress/info text
 function print_info {
-	echo -e "\e[1;34m==> $*\e[0m"
+	echo -e "\e[1;34m==>\e[0m \e[1m$*\e[0m"
 }
 # Print starting a stage/process
 function print_stage {
@@ -48,7 +48,7 @@ function print_stage {
 }
 # Print warning text
 function print_warning {
-	echo -e "\e[1;33mWARN $*\e[0m"
+	echo -e "\e[0;33mWARN $*\e[0m"
 }
 # Print error text
 function print_error {
